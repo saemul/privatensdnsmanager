@@ -4,7 +4,7 @@
 2. Extract zip
 3. Open WHMCS Admin Page -> Setup -> Addon Modules
 4. Activate PrivateNS DNS Manager
-5. Insert Client ID, Secret ID and you Reseller URL
+5. Insert Client ID, Secret ID and you Reseller URL that you can get from https://developer.irsfa.id, for API Documentation please read here: https://developer.irsfa.id/documentation/ 
 6. Save Changes
 7. Put this code somewhere in your clientareadomaindetails.tpl
 ```html
