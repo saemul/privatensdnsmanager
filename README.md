@@ -6,7 +6,20 @@
 4. Activate PrivateNS DNS Manager
 5. Insert Client ID, Secret ID and you Reseller URL
 6. Save Changes
-7. Put this code somewhere in your clientareadomain.tpl and clientareadomaindetails.tpl
+7. Put this code somewhere in your clientareadomaindetails.tpl
+```html
+<div class="row">
+    <div class="col-sm-offset-1 col-sm-5">
+        <a href="http://customdomainanda.com/index.php?m=privatensdns&domainname={$domain}" class="btn btn-info" role="button">DNS Manager</a>
+    </div>
+</div>
+```
+    after thisline code:
+```html
+<div class="row">
+    <div class="col-sm-offset-1 col-sm-5">
+        <h4><strong>{$LANG.clientareastatus}:</strong></h4> {$status}
+    </div>
+</div>
+```
 
-`<a href="index.php?m=irsfadns&domainname={$domain}">
-DNS Manager</a>`
