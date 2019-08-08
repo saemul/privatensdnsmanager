@@ -112,6 +112,7 @@
     });
 
     $("#terminated").click(function() {
+        condole.log('hasawao');
         var $btn = $(this);
         var answer = confirm("Are you sure you want to terminate all record?");
         if(answer){

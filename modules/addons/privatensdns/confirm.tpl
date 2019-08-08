@@ -51,7 +51,14 @@
     });
     $("#confirmed").click(function() {
         var $btn = $(this);
-        $btn.button('loading');
+        var answer = confirm("Are you sure you want to use this fiture?");
+        if(answer){
+            $btn.button('loading');
+            return true;
+        }
+        else{
+            return false;
+        }
         
     });
 </script>

@@ -9,9 +9,9 @@ PrivateNS DNS Manager Module v3
 7. Put this code somewhere in your clientareadomaindetails.tpl
 
 <div class="row">
-    <div class="col-sm-offset-1 col-sm-5">
-        <a href="http://customdomainanda.com/index.php?m=privatensdns&domainname={$domain}" class="btn btn-info" role="button">DNS Manager</a>
-    </div>
+            <div class="col-sm-offset-1 col-sm-5">
+                <h4><strong>DNS Manager:</strong></h4> <a href="https://customdomainanda.com/index.php?m=privatensdns&domainname={$domain}" class="btn btn-info" role="button">DNS Manager</a>
+            </div>
 </div>
 
     after thisline code:

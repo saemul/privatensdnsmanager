@@ -369,14 +369,30 @@ function privatensdns_clientarea($vars) {
     }
 
     if(isset($_GET['confirm'])){
-            $changeNs = $main->confirmChangeNs($vars,$_GET['domainname']);
-            if($changeNs->code == 200){
-                $createDNS = $main->createDNS($vars,$_GET['domainname']);
-                if($createDNS->code == 200){
-                    header("Location:index.php?m=privatensdns&domainname=".$domainname."");
+        $changeNs = $main->confirmChangeNs($vars,$_GET['domainname']);
+        if($changeNs->code == 200){
+            $createDNS = $main->createDNS($vars,$_GET['domainname']);
+            if($createDNS->code == 200){
+                $message = ['status' => 'success', 'messages' => $createDNS->message];
+            }else{
+                $message = ['status' => 'failed', 'messages' => 'Failed create dns record. Please contact your administrator!'];
             }
+            
+            sleep (10);
+
+            $getDNS = $main->listDNS($vars,$_GET['domainname']);
+            $allData = ['dns' => $getDNS->data, 'domainname' =>$_GET['domainname']];
+            return array(
+                'pagetitle'    => 'Privatens DNS Manager',
+                'breadcrumb'   => array('index.php?m=privatensdns'=>'Privatens DNS Manager'),
+                'templatefile' => 'clienthome',
+                'requirelogin' => true, # accepts true/false
+                'forcessl'     => false, # accepts true/false
+                'vars'         => $allData,
+            );
+
         }
-        
+
     }
     
     if($check->data->status == 0){
