@@ -117,7 +117,8 @@
         
             ];
             $datas = [
-                "domain" => $domain
+                "domain" => $domain,
+                "ip" => '103.102.152.5'
             ];
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
