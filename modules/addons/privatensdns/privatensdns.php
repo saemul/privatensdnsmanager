@@ -118,7 +118,7 @@
             ];
             $datas = [
                 "domain" => $domain,
-                "ip" => '103.102.152.5'
+                "ip" => '103.102.152.5',
             ];
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
@@ -143,13 +143,14 @@
                 "scope" => "",
         
             ];
-            $datas = [
-                "domain" => $data['domain'],
-                "name" => $data['host'],
-                "type" => $data['type'],
-                "ttl" => $data['ttl'],
-                "value" => $data['value']
-            ];
+            $datas = $data;
+            $datas['isroot'] = true;
+            
+            $name = $datas['name'];
+            if (!isset($name) || $name == '') {
+                $datas['name'] = $datas['domain'] . '.';
+            }
+            
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
                 
@@ -165,7 +166,7 @@
             
         }
 
-        function deleteDNS($params,$ids) {
+        function deleteDNS($params,$domain,$line) {
             $oauth2 = [
                 "grant_type" => "client_credentials",
                 "client_id" => $params['clientid'],
@@ -174,12 +175,13 @@
         
             ];
             $datas = [
-                "dns_manager_id" => $ids,
+                "line"=>$line,
+	            "domain"=> $domain,
             ];
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
                 
-                $request = $this->request($params['apiurl']."/rest/v2/dnsmanagerv2/delete","DELETE",$auth->access_token,$datas);
+                $request = $this->request($params['apiurl']."/rest/v2/dnsmanagerv2/delete","POST",$auth->access_token,$datas);
 
                 return $request;
                 
@@ -205,7 +207,7 @@
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
                 
-                $request = $this->request($params['apiurl']."/rest/v2/dnsmanagerv2/terminate","DELETE",$auth->access_token,$datas);
+                $request = $this->request($params['apiurl']."/rest/v2/dnsmanagerv2/terminate","POST",$auth->access_token,$datas);
 
                 return $request;
                 
@@ -226,7 +228,7 @@
         
             ];
             $datas = [
-                "domain" => $domain
+                "domain" => $domain,
             ];
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
@@ -296,11 +298,11 @@ function privatensdns_clientarea($vars) {
         'vars'=>json_encode($vars),
     );
 
-    $check=$main->checkStatus($vars,$_GET['domainname']);
+
     if(isset($_GET['delete'])){ 
         $domainname=$_GET['domainname'];
         $ids=$_GET['ids'];
-        $deleteDns = $main->deleteDNS($vars,$ids);
+        $deleteDns = $main->deleteDNS($vars, $domainname, $ids);
         if($deleteDns->code == 200){
             $message = ['status' => 'success', 'messages' => $deleteDns->message];
         }else{
@@ -342,13 +344,14 @@ function privatensdns_clientarea($vars) {
     
     if(isset($_GET['add'])){   
         $domainname=$_GET['domainname'];
-        $data=array(
-            'domain'=>$_POST['domain'],
-            'host'  =>$_POST['host'],
-            'type'  =>$_POST['type'],
-            'value' =>$_POST['value'],
-            'ttl'   =>$_POST['ttl'],
-        );
+        // $data=array(
+        //     'domain'=>$_POST['domain'],
+        //     'host'  =>$_POST['host'],
+        //     'type'  =>$_POST['type'],
+        //     'value' =>$_POST['value'],
+        //     'ttl'   =>$_POST['ttl'],
+        // );
+        $data = $_POST;
         $addDNS = $main->addDNS($vars,$data);
         if($addDNS->code == 200){
             $message = ['status' => 'success', 'messages' => $addDNS->message];
@@ -396,7 +399,8 @@ function privatensdns_clientarea($vars) {
 
     }
     
-    if($check->data->status == 0){
+    $check=$main->listDNS($vars,$_GET['domainname']);
+    if(!boolval($check->data->data->zone)){
         return array(
             'pagetitle'    => 'Privatens DNS Manager',
             'breadcrumb'   => array('index.php?m=privatensdns'=>'Privatens DNS Manager'),
