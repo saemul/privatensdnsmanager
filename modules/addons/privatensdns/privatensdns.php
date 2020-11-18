@@ -122,7 +122,7 @@
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
                 
-                $request = $this->request($params['apiurl']."/rest/v2/dnsmanager/create","POST",$auth->access_token,$datas);
+                $request = $this->request($params['apiurl']."/rest/v2/dnsmanagerv2/create","POST",$auth->access_token,$datas);
 
                 return $request;
                 
@@ -152,7 +152,7 @@
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
                 
-                $request = $this->request($params['apiurl']."/rest/v2/dnsmanager/add","POST",$auth->access_token,$datas);
+                $request = $this->request($params['apiurl']."/rest/v2/dnsmanagerv2/add","POST",$auth->access_token,$datas);
 
                 return $request;
                 
@@ -178,7 +178,7 @@
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
                 
-                $request = $this->request($params['apiurl']."/rest/v2/dnsmanager/delete","DELETE",$auth->access_token,$datas);
+                $request = $this->request($params['apiurl']."/rest/v2/dnsmanagerv2/delete","DELETE",$auth->access_token,$datas);
 
                 return $request;
                 
@@ -204,7 +204,7 @@
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
                 
-                $request = $this->request($params['apiurl']."/rest/v2/dnsmanager/terminate","DELETE",$auth->access_token,$datas);
+                $request = $this->request($params['apiurl']."/rest/v2/dnsmanagerv2/terminate","DELETE",$auth->access_token,$datas);
 
                 return $request;
                 
@@ -230,7 +230,7 @@
             try {
                 $auth = $this->authentication($params['apiurl'],$oauth2);
                 
-                $request = $this->request($params['apiurl']."/rest/v2/dnsmanager/list","POST",$auth->access_token,$datas);
+                $request = $this->request($params['apiurl']."/rest/v2/dnsmanagerv2/list","POST",$auth->access_token,$datas);
 
                 return $request;
                 
