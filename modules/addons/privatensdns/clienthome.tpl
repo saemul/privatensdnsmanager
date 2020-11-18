@@ -29,14 +29,24 @@
             <th>#Action</th>
         </thead>
         <tbody>
-            {foreach $dns as $value}
-            <tr>
-                <td><input type='text' class='form-control' value='{$value->host_name}'></td>
-                <td><input type='text' class='form-control' value='{strtoupper($value->type)}'></td>
-                <td><input type='text' class='form-control' value='{$value->ttl}'></td>
-                <td><input type='text' class='form-control' value='{$value->value}'></td>
-                <td><a href='index.php?m=privatensdns&domainname={$domainname}&delete&ids={$value->dns_manager_id}' class='btn btn-danger deleted' data-loading-text="<i class='fa fa-spinner fa-spin '></i> Deleting"><i class="fa fa-trash"></i> Delete</a></td>
-            </tr>
+            {foreach $dns->data->zone[0]->record as $value}
+                {if $value->name}
+                    <tr>
+                        <td><input type='text' class='form-control' value='{$value->name}'></td>
+                        <td><input type='text' class='form-control' value='{strtoupper($value->type)}'></td>
+                        <td><input type='text' class='form-control' value='{$value->ttl}'></td>
+                        <td>
+                            {if $value->exchange } <input type='text' class='form-control' value='{$value->exchange}'>{/if}
+                            {if $value->address } <input type='text' class='form-control' value='{$value->address}'> {/if}
+                            {if $value->nsdname } <input type='text' class='form-control' value='{$value->nsdname}' > {/if}
+                            {if $value->raw } <input type='text' class='form-control' value='{$value->raw}'> {/if}
+                            {if $value->cname } <input type='text' class='form-control' value='{$value->cname}'> {/if}
+                            {if $value->preference } <input type='text' class='form-control' value='{$value->preference}'> {/if}
+                            {if $value->txtdata } <input type='text' class='form-control' value='{$value->txtdata}'> {/if}
+                        </td>
+                        <td><a href='index.php?m=privatensdns&domainname={$domainname}&delete&ids={$value->Line}' class='btn btn-danger deleted' data-loading-text="<i class='fa fa-spinner fa-spin '></i> Deleting"><i class="fa fa-trash"></i> Delete</a></td>
+                    </tr>>
+                {/if}
             {/foreach}
         </tbody>
     </table>
@@ -50,25 +60,29 @@
                      
                     
                      <td>
-                         <input name="host" class='form-control' placeholder='Hostname'>
+                         <input name="name" class='form-control' placeholder='Hostname'>
                      </td>
                      <td>
-                         <select name="type" class="form-control">
-						    <option value="a">A</option>
-						    <option value="aaaa">AAAA</option>
-							<option value="cname">CNAME</option>
-							<option value="mx">MX</option>
-							<option value="txt">TXT</option>
-							<option value="sfp">SFP</option>
-							<option value="ns">NS</option>
+                         <select name="type" class="form-control" id="select-type" onchange="changeValue(this)">
+						    <option value="A">A</option>
+						    <option value="AAAA">AAAA</option>
+							<option value="CNAME">CNAME</option>
+							<option value="MX">MX</option>
+							<option value="TXT">TXT</option>
+							<option value="NS">NS</option>
 						</select>
                      </td>
                       
                       <td>
                          <input name="ttl" class='form-control' placeholder='ttl'>
                      </td>
-                      <td>
-                         <input name="value" class='form-control' placeholder='value'>
+                      <td id="add-container">
+                         <input id="address" name="values[address]" class='form-control' placeholder='Address'>
+                         <input id="cname" name="values[cname]" class='form-control' placeholder='Cname'>
+                         <input id="preference" name="values[preference]" class='form-control' placeholder='Preference'>
+                         <input id="exchange" name="values[exchange]" class='form-control' placeholder='Exchange'>
+                         <input id="txtdata" name="values[txtdata]" class='form-control' placeholder='Txtdata'>
+                         <input id="nsdname" name="values[nsdname]" class='form-control' placeholder='Nsdname'>
                      </td>
                 </tr>
                 <tr>
@@ -98,6 +112,36 @@
         $btn.button('loading');
         
     });
+    
+    function changeValue(el){
+        $('#add-container input').hide()
+        
+        switch(el.value.toLowerCase()) {
+            case "a" :
+                $('#add-container').find('#address').show()
+                break;
+            case "aaaa" :
+                $('#add-container').find('#address').show()
+                break;
+            case "cname" :
+                $('#add-container').find('#cname').show()
+                break;
+            case "mx" :
+                $('#add-container').find('#exchange').show()
+                $('#add-container').find('#preference').show()
+                break;
+            case "txt" :
+                $('#add-container').find('#txtdata').show()
+                break;
+            case "ns" :
+                $('#add-container').find('#nsdname').show()
+                break;
+                
+        }
+        
+    }
+    
+    changeValue($('#select-type')[0])
 
     $(".deleted").click(function(){
         var $btn = $(this);
